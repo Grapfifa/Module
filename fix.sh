@@ -389,37 +389,32 @@ for package in "${packages[@]}"; do
 done
 }> /dev/null 2>&1  
 game
-echo "[+] Đang buff màn hình..."
-current_size=$(wm size | grep -oE '[0-9]+x[0-9]+')
-width=$(echo "$current_size" | cut -d'x' -f1)
-height=$(echo "$current_size" | cut -d'x' -f2)
-current_dpi=$(wm density | grep -oE '[0-9]+')
-if [ -z "$width" ] || [ -z "$height" ] || [ -z "$current_dpi" ]; then
-    echo "❌ Không lấy được thông tin màn hình hoặc DPI"
-    exit 1
-fi
-width=$(expr "$width" + 0)
-height=$(expr "$height" + 0)
-current_dpi=$(expr "$current_dpi" + 0)
-echo "📱 Độ phân giải gốc: ${width}x${height}, DPI: $current_dpi"
-if [ "$current_dpi" -lt 400 ]; then
-    echo "🚀 Tăng DPI và độ phân giải"
-    new_width=$((width * 11 / 10))
-    new_height=$((height * 11 / 10))
-    new_dpi=$((current_dpi + 40))
+
+# Lấy kích thước và DPI hiện tại
+size=$(wm size | grep -oE '[0-9]+x[0-9]+')
+dpi=$(wm density | grep -oE '[0-9]+')
+
+width=$(echo "$size" | cut -d'x' -f1)
+height=$(echo "$size" | cut -d'x' -f2)
+
+# Điều kiện xử lý theo DPI
+if [ "$dpi" -le 400 ]; then
+  # Buff màn 1.1 nếu DPI ≤ 400
+  scale=1.1
+  echo "🔧 Đang buff màn hình với tỷ lệ $scale do DPI thấp ($dpi)"
 else
-    echo "📉  → Giảm DPI và độ phân giải "
-    new_width=$((width * 8 / 10))
-    new_height=$((height * 8 / 10))
-    tentative_dpi=$((current_dpi * 95 / 100))
-    if [ "$tentative_dpi" -lt 320 ]; then
-        new_dpi=320
-    else
-        new_dpi=$tentative_dpi
-    fi
+  # Giảm độ phân giải 0.9 nếu DPI > 400
+  scale=0.9
+  echo "⚙️ Đang giảm độ phân giải xuống $scale do DPI cao ($dpi)"
 fi
-wm size "${new_width}x${new_height}" >/dev/null 2>&1
-wm density "$new_dpi" >/dev/null 2>&1
+
+# Tính toán độ phân giải mới
+new_width=$(echo "$width * $scale" | bc | cut -d'.' -f1)
+new_height=$(echo "$height * $scale" | bc | cut -d'.' -f1)
+
+# Áp dụng độ phân giải mới
+wm size ${new_width}x${new_height}
+echo "✅ Đã thay đổi độ phân giải thành ${new_width}x${new_height}"
 echo "✅ Đã thay đổi: ${new_width}x${new_height}, DPI: $new_dpi"
 echo "Thành công👌"   
 echo "Đã bật chế độ fix lag trò chơi 👌"
