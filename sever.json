@@ -1,12 +1,12 @@
 [
   {
-    "name": "demo",
+    "name": "Super Gaming",
     "version": "V1",
     "raw": "https://raw.githubusercontent.com/Grapfifa/Module/refs/heads/main/fix.sh"
   },
   {
-   "name": "SensiXPatch",
-    "version": "V2",
-    "raw": ""
+   "name": "Delete Super Gaming",
+    "version": "V1",
+    "raw": "https://raw.githubusercontent.com/Grapfifa/Module/refs/heads/main/fixx.sh"
   }
 ]
