@@ -31,20 +31,14 @@ echo ".                👽Zalo: Thắng Lê👽"
     echo ""
     echo "[+] Đang bật chế độ fix lag..."
 refresh_rate=$(dumpsys SurfaceFlinger | grep refresh-rate | awk -F': ' '{print $2}' | awk '{print int($1+0.5)}')
-echo "$PROGRESS_DIV Display Refresh Rate: ${refresh_rate}Hz"
+echo " Display Refresh Rate: ${refresh_rate}Hz"
 case $refresh_rate in
     144|120|90|60)
-cmd device_config put system display_refresh_rate $refresh_rate
 settings put secure user_refresh_rate $refresh_rate
 settings put secure miui_refresh_rate $refresh_rate
-settings put system min_frame_rate $refresh_rate
-settings put system max_frame_rate $refresh_rate
-settings put global min_fps $refresh_rate
-settings put global max_fps $refresh_rate
 settings put system min_refresh_rate $refresh_rate
 settings put system max_refresh_rate $refresh_rate
 settings put system peak_refresh_rate $refresh_rate
-settings put secure refresh_rate_mode $refresh_rate
 settings put system user_refresh_rate $refresh_rate
 settings put system thermal_limit_refresh_rate $refresh_rate
 settings put system NV_FPSLIMIT $refresh_rate
@@ -54,82 +48,6 @@ settings put system NV_FPSLIMIT $refresh_rate
         exit 1
         ;;
 esac
-refresh_rate=$(dumpsys SurfaceFlinger | grep -m1 "refresh-rate" | awk '{print int($3)}')
-echo "Tần số quét phát hiện: $refresh_rate Hz"
-
-case "$refresh_rate" in
-  60)
-    frame_ns=16666667
-    phazev1=995000
-    phazev2=1984000
-    phazev3=4012000
-    phazev4=4762000
-    phazev5=5596000
-    phazev6=9200000
-    phazev7=17540000
-    hwc_duration=21666667
-    ;;
-  90)
-    frame_ns=11111111
-    phazev1=663636
-    phazev2=1322798
-    phazev3=2677156
-    phazev4=3174603
-    phazev5=3728597
-    phazev6=6132605
-    phazev7=11701064
-    hwc_duration=14444444
-    ;;
-  120)
-    frame_ns=8333333
-    phazev1=497015
-    phazev2=991101
-    phazev3=2008056
-    phazev4=2380952
-    phazev5=2800000
-    phazev6=4601845
-    phazev7=8771930
-    hwc_duration=10833333
-    ;;
-  144)
-    frame_ns=6944444
-    phazev1=414903
-    phazev2=826718
-    phazev3=1673494
-    phazev4=2026984
-    phazev5=2373892
-    phazev6=3900552
-    phazev7=7425736
-    hwc_duration=9027777
-    ;;
-  *)
-    echo "Không hỗ trợ tần số quét này ($refresh_rate Hz). Thoát."
-    exit 1
-    ;;
-esac
-setprop debug.sf.hwc.min.duration $hwc_duration
-setprop debug.sf.high_fps_early_app_phase_offset_ns $phazev1
-setprop debug.sf.high_fps_early_gl_app_phase_offset_ns $phazev1
-setprop debug.sf.early_app_phase_offset_ns $phazev2
-setprop debug.sf.early_gl_app_phase_offset_ns $phazev2
-setprop debug.sf.high_fps_early_gl_phase_offset_ns $phazev3
-setprop debug.sf.high_fps_early_phase_offset_ns $phazev3
-setprop debug.sf.region_sampling_duration_ns $phazev4
-setprop debug.sf.cached_set_render_duration_ns $phazev4
-setprop debug.sf.early.app.duration $phazev4
-setprop debug.sf.early.sf.duration $phazev4
-setprop debug.sf.earlyGl.app.duration $phazev4
-setprop debug.sf.earlyGl.sf.duration $phazev4
-setprop debug.sf.early_gl_phase_offset_ns $phazev5
-setprop debug.sf.early_phase_offset_ns $phazev5
-setprop debug.sf.region_sampling_period_ns $phazev6
-setprop debug.sf.phase_offset_threshold_for_next_vsync_ns $phazev6
-setprop debug.sf.high_fps_late_app_phase_offset_ns $phazev6
-setprop debug.sf.high_fps_late_sf_phase_offset_ns $phazev6
-setprop debug.sf.late.app.duration $phazev6
-setprop debug.sf.late.sf.duration $phazev6
-setprop debug.sf.region_sampling_timer_timeout_ns $phazev7
-echo "Đã áp dụng tối ưu cho $refresh_rate Hz thành công."
 fixlag() {
 setprop log.tag.SQLiteQueryBuilder WARN 
 setprop log.tag.FuseDaemon WARN 
@@ -279,6 +197,27 @@ setprop log.tag.PersistentDataBlockManager WARN
 setprop log.tag.NetworkTimeUpdateService WARN 
 setprop log.tag.ThermalManager WARN 
 setprop log.tag.PrintManager WARN 
+    setprop debug.renderengine.backend skiagl
+    setprop debug.renderengine.backend skiaglthreaded
+    setprop debug.angle.overlay FPS:skiagl*PipelineCache*
+    setprop debug.javafx.animation.framerate 120
+    setprop debug.systemuicompilerfilter speed
+    setprop debug.app.performance_restricted false
+    setprop debug.sf.set_idle_timer_ms 30
+    setprop debug.sf.disable_backpressure 1
+    setprop debug.sf.latch_unsignaled 1
+    setprop debug.sf.enable_hwc_vds 1
+    setprop debug.sf.early_phase_offset_ns 500000
+    setprop debug.sf.early_app_phase_offset_ns 500000
+    setprop debug.sf.early_gl_phase_offset_ns 3000000
+    setprop debug.sf.early_gl_app_phase_offset_ns 15000000
+    setprop debug.sf.high_fps_early_phase_offset_ns 6100000
+    setprop debug.sf.high_fps_late_sf_phase_offset_ns 8000000
+    setprop debug.sf.high_fps_early_gl_phase_offset_ns 9000000
+    setprop debug.sf.high_fps_late_app_phase_offset_ns 1000000
+    setprop debug.sf.high_fps_late_sf_phase_offset_ns 8000000
+    setprop debug.sf.high_fps_early_gl_phase_offset_ns 9000000
+    setprop debug.sf.phase_offset_threshold_for_next_vsync_ns 610000
 setprop debug.egl.callstack false
 setprop debug.egl.blobcache.multifile true
 setprop debug.egl.blobcache.multifile_limit -1
@@ -449,6 +388,7 @@ for package in "${packages[@]}"; do
   cmd device_config put game_overlay "$package" mode=2,fps=120,useAngle=true
 done
 }> /dev/null 2>&1  
+game
 echo "[+] Đang buff màn hình..."
 current_size=$(wm size | grep -oE '[0-9]+x[0-9]+')
 width=$(echo "$current_size" | cut -d'x' -f1)
