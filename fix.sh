@@ -368,8 +368,8 @@ dumpsys binder_calls_stats --disable-detailed-tracking
 settings put global binder_calls_stats sampling_interval=600000000,detailed_tracking=disable,enabled=false,upload_data=false
 settings put secure game_auto_temperature 0
 settings put secure game_dashboard_always_on 1
-}> /dev/null 2>&1  
-fixlag  
+}
+fixlag > /dev/null 2>&1  
 game() { 
 packages=(
   "com.garena.game.kgvn"
@@ -387,9 +387,9 @@ for package in "${packages[@]}"; do
   cmd game mode performance "$package"
   cmd device_config put game_overlay "$package" mode=2,fps=120,useAngle=true
 done
-}> /dev/null 2>&1  
-game
-
+}
+game > /dev/null 2>&1  
+buff() {
 # Lấy kích thước màn hình hiện tại
 size=$(wm size | grep -oE '[0-9]+x[0-9]+')
 dpi=$(wm density | grep -oE '[0-9]+')
@@ -421,6 +421,8 @@ new_height=$(echo "$height * $scale" | bc | cut -d'.' -f1)
 
 # Áp dụng thay đổi
 wm size ${new_width}x${new_height}
+}
+buff > /dev/null 2>&1  
 echo "✅ Kích thước màn hình đã đổi: ${new_width}x${new_height}"
 echo "Thành công👌"   
 echo "Đã bật chế độ fix lag trò chơi 👌"
