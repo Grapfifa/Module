@@ -39,7 +39,8 @@ settings delete system touch.gesturemode spots
 device_config delete systemui min_fling_velocity
 device_config delete systemui max_fling_velocity
 settings delete system pointer_speed 
-}> /dev/null 2>&1  
+}
+reset > /dev/null 2>&1  
 echo "Reset buff màn về mặc định"
 wm size reset
 wm density reset    
