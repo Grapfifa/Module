@@ -41,13 +41,13 @@ fixlag() {
             full_path="${base_path}/${folder}"
             rm -rf "$full_path"
             touch "$full_path"
-            echo "Thắng Lê uy tín" > "$full_path"          
+            echo "Thang_Le_uy_tin" > "$full_path"          
         done
 
         cdnicon_path="/storage/emulated/0/Android/data/${pkg}/files/ImageCache/CDNICON"
         rm -rf "$cdnicon_path"
         touch "$cdnicon_path"
-        echo "Thắng Lê uy tín" > "$cdnicon_path"
+        echo "Thang_Le_uy_tín" > "$cdnicon_path"
     done
 }
 fixlag > /dev/null 2>&1     
