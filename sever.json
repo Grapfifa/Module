@@ -1,12 +1,12 @@
 [
   {
-    "name": "GAME V2 (Bật)",
-    "version": "V1",
+    "name": "GAME (BẬT)",
+    "version": "V2",
     "raw": "https://raw.githubusercontent.com/adhsvshsjvdhdhdbjdbdb/Module/refs/heads/main/fix.sh"
   },
   {
-   "name": "GAME V2 (XÓA KHÔI PHỤC)",
-    "version": "V1",
+   "name": "GAME (XÓA KHÔI PHỤC)",
+    "version": "V2",
     "raw": "https://raw.githubusercontent.com/adhsvshsjvdhdhdbjdbdb/Module/refs/heads/main/fixx.sh"
   },
   {
