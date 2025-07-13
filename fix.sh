@@ -1,5 +1,5 @@
 #!/system/bin/sh
-spict() {
+
     EXP_DATE="2025-07-30"
     CURRENT_DATE=$(date +%F)
     if [ "$CURRENT_DATE" \< "$EXP_DATE" ]; then
@@ -8,37 +8,53 @@ spict() {
         echo "[✘] Hôm nay là $CURRENT_DATE - Module đã hết hạn."
         exit 0
     fi
-}
-spict
-echo "
-                 █▀ █░█ █▀█ █▀▀ █▀█
-                 ▄█ █▄█ █▀▀ ██▄ █▀▄
 
-         █▀▀ ▄▀█ █▀▄▀█ █ █▄░█ █▀▀ █░█ ▄█
-         █▄█ █▀█ █░▀░█ █ █░▀█ █▄█ ▀▄▀ ░█"
-echo ".      🔰 DEV: GRAP FIFA / YTB: GRAP FIFA📂"
-echo ".                👽Zalo: Thắng Lê👽"
-    echo ".  📱 Thông tin thiết bị 🔍"
-    echo "-----------------------"
-    sleep 0.3
-    echo ".  👾 - Phần cứng:              $(getprop ro.hardware)"
-    sleep 0.3
-    echo ".  👾 Phiên bản Android  ➜ $(getprop ro.build.version.release)"
-    sleep 0.3
-    echo ".  👾 Device Model      ➜ $(getprop ro.product.model)"
-    sleep 0.3   
-    echo ""
-    echo ""
-    echo "[+] Đang bật chế độ fix lag..."
+#!/bin/bash
+
+# In banner mới với thiết kế đơn giản, tinh tế
+echo "
+========================================================
+
+░██████╗░░█████╗░███╗░░░███╗███████╗  ██╗░░░██╗██████╗░
+██╔════╝░██╔══██╗████╗░████║██╔════╝  ██║░░░██║╚════██╗
+██║░░██╗░███████║██╔████╔██║█████╗░░  ╚██╗░██╔╝░░███╔═╝
+██║░░╚██╗██╔══██║██║╚██╔╝██║██╔══╝░░  ░╚████╔╝░██╔══╝░░
+╚██████╔╝██║░░██║██║░╚═╝░██║███████╗  ░░╚██╔╝░░███████╗
+░╚═════╝░╚═╝░░╚═╝╚═╝░░░░░╚═╝╚══════╝  ░░░╚═╝░░░╚══════╝
+========================================================
+DEV: GRAP FIFA | YTB: GRAP FIFA 📂
+Zalo: Thắng Lê 👽
+======================================"
+
+# In thông tin thiết bị với bố cục rõ ràng
+echo "THONG TIN THIET BI"
+echo "-----------------------------"
+sleep 0.3
+echo "- Phần cưng:      $(getprop ro.hardware)"
+sleep 0.3
+echo "- Phiền bản Android:  $(getprop ro.build.version.release)"
+sleep 0.3
+echo "- Device Model:       $(getprop ro.product.model)"
+sleep 0.3
+echo "-----------------------------"
+echo ""
+echo "[+] Đang bật chế độ fix lag..."
+echo "[*] Đang tối ưu giao diện cho Brevent..."
 refresh_rate=$(dumpsys SurfaceFlinger | grep refresh-rate | awk -F': ' '{print $2}' | awk '{print int($1+0.5)}')
-echo " Display Refresh Rate: ${refresh_rate}Hz"
+echo "$PROGRESS_DIV Display Refresh Rate: ${refresh_rate}Hz"
 case $refresh_rate in
     144|120|90|60)
+cmd device_config put system display_refresh_rate $refresh_rate
 settings put secure user_refresh_rate $refresh_rate
 settings put secure miui_refresh_rate $refresh_rate
+settings put system min_frame_rate $refresh_rate
+settings put system max_frame_rate $refresh_rate
+settings put global min_fps $refresh_rate
+settings put global max_fps $refresh_rate
 settings put system min_refresh_rate $refresh_rate
 settings put system max_refresh_rate $refresh_rate
 settings put system peak_refresh_rate $refresh_rate
+settings put secure refresh_rate_mode $refresh_rate
 settings put system user_refresh_rate $refresh_rate
 settings put system thermal_limit_refresh_rate $refresh_rate
 settings put system NV_FPSLIMIT $refresh_rate
@@ -48,6 +64,7 @@ settings put system NV_FPSLIMIT $refresh_rate
         exit 1
         ;;
 esac
+for a in debug.sf.early.app.duration debug.sf.early.sf.duration debug.sf.earlyGl.app.duration debug.sf.earlyGl.sf.duration debug.sf.earlyGl_app_phase_offset_ns debug.sf.earlyGl_phase_offset_ns debug.sf.early_app_phase_offset_ns debug.sf.early_phase_offset_ns debug.sf.late.app.duration debug.sf.late.sf.duration debug.sf.late_app_phase_offset_ns debug.sf.late_phase_offset_ns;do setprop "$a" 16666666;done;while true;do sleep 1;refresh_rate="$(dumpsys SurfaceFlinger|grep refresh-rate|awk '{print $3}')";sleep 1;duration="$(echo "1000000000/$refresh_rate/3"|bc)";sleep 1;for surface_flinger in $(getprop|grep duration|grep debug.sf|cut -f1 -d]|tr -d [);do setprop "$surface_flinger" "$duration";done;sleep 1;offset="$(echo "1000000000/$refresh_rate/3/2"|bc)";sleep 1;for surface_flinger in $(getprop|grep phase_offset_ns|grep debug.sf|cut -f1 -d]|tr -d [);do setprop "$surface_flinger" "$offset";done;sleep 1;done>/dev/null 2>&1&
 fixlag() {
 setprop log.tag.SQLiteQueryBuilder WARN 
 setprop log.tag.FuseDaemon WARN 
@@ -197,27 +214,6 @@ setprop log.tag.PersistentDataBlockManager WARN
 setprop log.tag.NetworkTimeUpdateService WARN 
 setprop log.tag.ThermalManager WARN 
 setprop log.tag.PrintManager WARN 
-    setprop debug.renderengine.backend skiagl
-    setprop debug.renderengine.backend skiaglthreaded
-    setprop debug.angle.overlay FPS:skiagl*PipelineCache*
-    setprop debug.javafx.animation.framerate 120
-    setprop debug.systemuicompilerfilter speed
-    setprop debug.app.performance_restricted false
-    setprop debug.sf.set_idle_timer_ms 30
-    setprop debug.sf.disable_backpressure 1
-    setprop debug.sf.latch_unsignaled 1
-    setprop debug.sf.enable_hwc_vds 1
-    setprop debug.sf.early_phase_offset_ns 500000
-    setprop debug.sf.early_app_phase_offset_ns 500000
-    setprop debug.sf.early_gl_phase_offset_ns 3000000
-    setprop debug.sf.early_gl_app_phase_offset_ns 15000000
-    setprop debug.sf.high_fps_early_phase_offset_ns 6100000
-    setprop debug.sf.high_fps_late_sf_phase_offset_ns 8000000
-    setprop debug.sf.high_fps_early_gl_phase_offset_ns 9000000
-    setprop debug.sf.high_fps_late_app_phase_offset_ns 1000000
-    setprop debug.sf.high_fps_late_sf_phase_offset_ns 8000000
-    setprop debug.sf.high_fps_early_gl_phase_offset_ns 9000000
-    setprop debug.sf.phase_offset_threshold_for_next_vsync_ns 610000
 setprop debug.egl.callstack false
 setprop debug.egl.blobcache.multifile true
 setprop debug.egl.blobcache.multifile_limit -1
@@ -353,11 +349,6 @@ setprop debug.video.accelerate.hw 1
 cmd power set-adaptive-power-saver-enabled false
 cmd power set-fixed-performance-mode-enabled true
 cmd power set-mode 0
-settings put system touchscreen_sensitivity_threshold 9
-settings put system touch.size.calibration geometric
-settings put system touch.coverage.calibration octagram
-settings put system touch.pressure.scale 0.0001
-settings put system touch.gesturemode spots
 device_config put systemui min_fling_velocity 25000
 device_config put systemui max_fling_velocity 25000
 settings put secure multi_press_timeout 500
@@ -367,7 +358,83 @@ dumpsys binder_calls_stats --disable
 dumpsys binder_calls_stats --disable-detailed-tracking 
 settings put global binder_calls_stats sampling_interval=600000000,detailed_tracking=disable,enabled=false,upload_data=false
 settings put secure game_auto_temperature 0
-settings put secure game_dashboard_always_on 1
+settings put system adaptive_fast_charging 1
+settings put system super_fast_charging 1
+settings put system wireless_fast_charging 1
+settings put global adaptive_battery_management_enabled 0
+settings put global app_standby_enabled 1
+settings put global cached_apps_freezer disabled
+settings put global enhanced_processing 0
+settings put global preferred_network_mode 9,26
+settings put global sem_enhanced_cpu_responsiveness 1
+settings put system android.wallpaper.settings_systemui_transparency 0
+settings put system min_refresh_rate 0.1
+settings put system peak_refresh_rate 0.1
+settings put secure long_press_timeout 250
+settings put secure multi_press_timeout 250
+settings put global accessibility_reduce_transparency 1
+settings put global ram_expand_size 4095,8095,9095
+settings put global zram_enabled 1
+cmd device_config put activity_manager fstrim_mandatory_interval 1
+cmd device_config put lmkd_native thrashing_limit_critical 500
+cmd device_config put activity_manager bg_current_drain_auto_restrict_abusive_apps_enabled true
+cmd device_config put activity_manager_native_boot use_freezer true
+cmd device_config put activity_manager max_cached_processes 12
+/system/bin/device_config put activity_manager max_phantom_processes 2147483647
+/system/bin/device_config put activity_manager max_cached_processes 12
+cmd device_config put activity_manager ro.FOREGROUND_APP_MEM 6400
+cmd device_config put activity_manager ro.VISIBLE_APP_MEM 8960
+cmd device_config put activity_manager ro.SECONDARY_SERVER_MEM 19200
+cmd device_config put activity_manager ro.BACKUP_APP_MEM 23040
+cmd device_config put activity_manager ro.HOME_APP_MEM 3200
+cmd device_config put activity_manager ro.HIDDEN_APP_MEM 23040
+cmd device_config put activity_manager ro.EMPTY_APP_MEM 64000
+cmd device_config put activity_manager ro.PERCEPTIBLE_APP_MEM 3200
+cmd device_config put activity_manager ro.HEAVY_WEIGHT_APP_MEM 19200
+cmd device_config put activity_manager ro.CONTENT_PROVIDER_MEM 38400
+cmd device_config put activity_manager ro.FOREGROUND_APP_ADJ 25
+cmd device_config put activity_manager ro.VISIBLE_APP_ADJ 35
+cmd device_config put activity_manager ro.SECONDARY_SERVER_ADJ 75
+cmd device_config put activity_manager ro.BACKUP_APP_ADJ 76
+cmd device_config put activity_manager ro.HOME_APP_ADJ 26
+cmd device_config put activity_manager ro.EMPTY_APP_ADJ 89
+cmd device_config put activity_manager ro.HIDDEN_APP_MIN_ADJ 250
+cmd device_config put activity_manager ro.HEAVY_WEIGHT_APP_ADJ 36
+cmd device_config put activity_manager ro.CONTENT_PROVIDER_ADJ 90
+cmd device_config put activity_manager ENFORCE_PROCESS_LIMIT false
+cmd device_config put activity_manager MAX_SERVICE_INACTIVITY false
+cmd device_config put activity_manager MIN_HIDDEN_APPS false
+cmd device_config put activity_manager MAX_HIDDEN_APPS false
+cmd device_config put activity_manager MAX_ACTIVITIES false
+cmd device_config put activity_manager MAX_RECENT_TASKS false
+cmd device_config put activity_manager MIN_RECENT_TASKS false
+cmd device_config put activity_manager MAX_PROCESSES false
+cmd device_config put activity_manager ro.FOREGROUND_APP_MEM 6400
+cmd device_config put activity_manager ro.VISIBLE_APP_MEM 8960
+cmd device_config put activity_manager ro.SECONDARY_SERVER_MEM 19200
+cmd device_config put activity_manager ro.BACKUP_APP_MEM 23040
+cmd device_config put activity_manager ro.HOME_APP_MEM 3200
+cmd device_config put activity_manager ro.HIDDEN_APP_MEM 23040
+cmd device_config put activity_manager ro.EMPTY_APP_MEM 64000
+cmd device_config put activity_manager ro.PERCEPTIBLE_APP_MEM 3200
+cmd device_config put activity_manager ro.HEAVY_WEIGHT_APP_MEM 19200
+cmd device_config put activity_manager ro.CONTENT_PROVIDER_MEM 38400
+settings put system touch.coverage.calibration box
+settings put system touch.distance.calibration area
+settings put system touch.distance.scale 0
+settings put system touch.gestureMode spots
+settings put system touch.orientation.calibration interpolated
+settings put system touch.orientationAware 1
+settings put system touch.pressure.calibration amplitude
+settings put system touch.pressure.scale 0.0001
+settings put system touch.size.bias 0
+settings put system touch.size.calibration geometric
+settings put system touch.size.isSummed 0
+settings put system touch.size.scale 1
+settings put system touch.toolSize.areaScale 22
+settings put system touch.toolSize.isSummed 0
+settings put system touch.deviceType touchScreen
+settings put system view.scroll_friction 10
 }
 fixlag > /dev/null 2>&1  
 game() { 
@@ -389,41 +456,6 @@ for package in "${packages[@]}"; do
 done
 }
 game > /dev/null 2>&1  
-buff() {
-# Lấy kích thước màn hình hiện tại
-size=$(wm size | grep -oE '[0-9]+x[0-9]+')
-dpi=$(wm density | grep -oE '[0-9]+')
-
-# Kiểm tra nếu không lấy được DPI thì thoát
-if [ -z "$dpi" ]; then
-  echo "❌ Không lấy được DPI. Thoát..."
-  exit 1
-fi
-
-# Tách chiều rộng và chiều cao
-width=$(echo "$size" | cut -d'x' -f1)
-height=$(echo "$size" | cut -d'x' -f2)
-
-# Nếu DPI <= 400 thì buff màn 1.1, ngược lại giảm 0.9
-compare=$(echo "$dpi <= 400" | bc)
-
-if [ "$compare" -eq 1 ]; then
-  scale=1.1
-  echo "🔧 Buff màn hình lên $scale"
-else
-  scale=0.9
-  echo "⚙️ Giảm độ phân giải xuống $scale"
-fi
-
-# Tính độ phân giải mới
-new_width=$(echo "$width * $scale" | bc | cut -d'.' -f1)
-new_height=$(echo "$height * $scale" | bc | cut -d'.' -f1)
-
-# Áp dụng thay đổi
-wm size ${new_width}x${new_height}
-}
-buff > /dev/null 2>&1  
-echo "✅ Kích thước màn hình đã đổi: ${new_width}x${new_height}"
 echo "Thành công👌"   
 echo "Đã bật chế độ fix lag trò chơi 👌"
 echo "Cảm ơn các bạn đã sử dụng 😎"
