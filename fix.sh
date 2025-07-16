@@ -64,201 +64,234 @@ settings put system NV_FPSLIMIT $refresh_rate
         exit 1
         ;;
 esac
-for a in debug.sf.early.app.duration debug.sf.early.sf.duration debug.sf.earlyGl.app.duration debug.sf.earlyGl.sf.duration debug.sf.earlyGl_app_phase_offset_ns debug.sf.earlyGl_phase_offset_ns debug.sf.early_app_phase_offset_ns debug.sf.early_phase_offset_ns debug.sf.late.app.duration debug.sf.late.sf.duration debug.sf.late_app_phase_offset_ns debug.sf.late_phase_offset_ns;do setprop "$a" 16666666;done;while true;do sleep 1;refresh_rate="$(dumpsys SurfaceFlinger|grep refresh-rate|awk '{print $3}')";sleep 1;duration="$(echo "1000000000/$refresh_rate/3"|bc)";sleep 1;for surface_flinger in $(getprop|grep duration|grep debug.sf|cut -f1 -d]|tr -d [);do setprop "$surface_flinger" "$duration";done;sleep 1;offset="$(echo "1000000000/$refresh_rate/3/2"|bc)";sleep 1;for surface_flinger in $(getprop|grep phase_offset_ns|grep debug.sf|cut -f1 -d]|tr -d [);do setprop "$surface_flinger" "$offset";done;sleep 1;done>/dev/null 2>&1&
-fixlag() {
-setprop log.tag.SQLiteQueryBuilder WARN 
-setprop log.tag.FuseDaemon WARN 
-setprop log.tag.GAv4 WARN 
-setprop log.tag.CAM2PORT_ WARN 
-setprop log.tag.FragmentManager WARN 
-setprop log.tag.libfuse WARN 
-setprop log.tag.AndroidRuntime WARN 
-setprop log.tag.PackageManager WARN 
-setprop log.tag.ActivityManager WARN 
-setprop log.tag.WindowManager WARN 
-setprop log.tag.AudioManager WARN 
-setprop log.tag.InputMethodManager WARN 
-setprop log.tag.BluetoothManager WARN 
-setprop log.tag.NetworkManagement WARN 
-setprop log.tag.ConnectivityManager WARN 
-setprop log.tag.WifiManager WARN 
-setprop log.tag.TelephonyManager WARN 
-setprop log.tag.LocationManager WARN 
-setprop log.tag.SensorManager WARN 
-setprop log.tag.PowerManager WARN 
-setprop log.tag.SurfaceFlinger WARN 
-setprop log.tag.MediaPlayer WARN 
-setprop log.tag.AudioPolicyManager WARN 
-setprop log.tag.InputManager WARN 
-setprop log.tag.AccountManager WARN 
-setprop log.tag.DevicePolicyManager WARN 
-setprop log.tag.WallpaperManager WARN 
-setprop log.tag.BatteryManager WARN 
-setprop log.tag.ContentManager WARN 
-setprop log.tag.GraphicsStats WARN 
-setprop log.tag.JobScheduler WARN 
-setprop log.tag.UsbManager WARN 
-setprop log.tag.VpnManager WARN 
-setprop log.tag.NotificationManager WARN 
-setprop log.tag.AlarmManager WARN 
-setprop log.tag.ClipboardManager WARN 
-setprop log.tag.InputDispatcher WARN 
-setprop log.tag.NetworkStats WARN 
-setprop log.tag.BackupManager WARN 
-setprop log.tag.KeyguardManager WARN 
-setprop log.tag.DeviceIdleController WARN 
-setprop log.tag.ActivityTaskManager WARN 
-setprop log.tag.DisplayManager WARN 
-setprop log.tag.UsbHostManager WARN 
-setprop log.tag.AppOps WARN 
-setprop log.tag.HardwarePropertiesManager WARN 
-setprop log.tag.StorageManager WARN 
-setprop log.tag.ServiceManager WARN 
-setprop log.tag.DockObserver WARN 
-setprop log.tag.PersistentDataBlockManager WARN 
-setprop log.tag.NetworkTimeUpdateService WARN 
-setprop log.tag.ThermalManager WARN 
-setprop log.tag.PrintManager WARN 
-setprop log.tag.NetworkPolicy WARN 
-setprop log.tag.BluetoothAdapter WARN 
-setprop log.tag.BluetoothSocket WARN 
-setprop log.tag.BluetoothDevice WARN 
-setprop log.tag.MediaRouter WARN 
-setprop log.tag.MediaSession WARN 
-setprop log.tag.LocationProvider WARN 
-setprop log.tag.ConnectivityService WARN 
-setprop log.tag.BatteryStatsService WARN 
-setprop log.tag.ProcessStats WARN 
-setprop log.tag.PackageInstaller WARN 
-setprop log.tag.DownloadManager WARN 
-setprop log.tag.SystemServer WARN 
-setprop log.tag.HardwareService WARN 
-setprop log.tag.PowerManagerService WARN 
-setprop log.tag.InputMethodManagerService WARN 
-setprop log.tag.StatusBarManagerService WARN 
-setprop log.tag.NetworkManagementService WARN 
-setprop log.tag.NetworkPolicyManagerService WARN 
-setprop log.tag.TelephonyRegistry WARN 
-setprop log.tag.MountService WARN 
-setprop log.tag.WindowManagerService WARN 
-setprop log.tag.DisplayManagerService WARN 
-setprop log.tag.ActivityManagerService WARN 
-setprop log.tag.ActivityTaskManagerService WARN 
-setprop log.tag.AlarmManagerService WARN 
-setprop log.tag.NotificationManagerService WARN 
-setprop log.tag.VibratorService WARN 
-setprop log.tag.ConsumerIrService WARN 
-setprop log.tag.DevicePolicyManagerService WARN 
-setprop log.tag.LocationManagerService WARN 
-setprop log.tag.InputManagerService WARN 
-setprop log.tag.AudioService WARN 
-setprop log.tag.MediaPlayerService WARN 
-setprop log.tag.AudioPolicyService WARN 
-setprop log.tag.BluetoothService WARN 
-setprop log.tag.BluetoothGattService WARN 
-setprop log.tag.BluetoothHidService WARN 
-setprop log.tag.BluetoothPanService WARN 
-setprop log.tag.BluetoothMapService WARN 
-setprop log.tag.BluetoothPbapService WARN 
-setprop log.tag.BluetoothSapService WARN 
-setprop log.tag.SQLiteQueryBuilder WARN 
-setprop log.tag.FuseDaemon WARN 
-setprop log.tag.GAv4 WARN 
-setprop log.tag.CAM2PORT_ WARN 
-setprop log.tag.FragmentManager WARN 
-setprop log.tag.libfuse WARN 
-setprop log.tag.AndroidRuntime WARN 
-setprop log.tag.PackageManager WARN 
-setprop log.tag.ActivityManager WARN 
-setprop log.tag.WindowManager WARN 
-setprop log.tag.AudioManager WARN 
-setprop log.tag.InputMethodManager WARN 
-setprop log.tag.BluetoothManager WARN 
-setprop log.tag.NetworkManagement WARN 
-setprop log.tag.ConnectivityManager WARN 
-setprop log.tag.WifiManager WARN 
-setprop log.tag.TelephonyManager WARN 
-setprop log.tag.LocationManager WARN 
-setprop log.tag.SensorManager WARN 
-setprop log.tag.PowerManager WARN 
-setprop log.tag.SurfaceFlinger WARN 
-setprop log.tag.MediaPlayer WARN 
-setprop log.tag.AudioPolicyManager WARN 
-setprop log.tag.InputManager WARN 
-setprop log.tag.AccountManager WARN 
-setprop log.tag.DevicePolicyManager WARN 
-setprop log.tag.WallpaperManager WARN 
-setprop log.tag.BatteryManager WARN 
-setprop log.tag.ContentManager WARN 
-setprop log.tag.GraphicsStats WARN 
-setprop log.tag.JobScheduler WARN 
-setprop log.tag.UsbManager WARN 
-setprop log.tag.VpnManager WARN 
-setprop log.tag.NotificationManager WARN 
-setprop log.tag.AlarmManager WARN 
-setprop log.tag.ClipboardManager WARN 
-setprop log.tag.InputDispatcher WARN 
-setprop log.tag.NetworkStats WARN 
-setprop log.tag.BackupManager WARN 
-setprop log.tag.KeyguardManager WARN 
-setprop log.tag.DeviceIdleController WARN 
-setprop log.tag.ActivityTaskManager WARN 
-setprop log.tag.DisplayManager WARN 
-setprop log.tag.UsbHostManager WARN 
-setprop log.tag.AppOps WARN 
-setprop log.tag.HardwarePropertiesManager WARN 
-setprop log.tag.StorageManager WARN 
-setprop log.tag.ServiceManager WARN 
-setprop log.tag.DockObserver WARN 
-setprop log.tag.PersistentDataBlockManager WARN 
-setprop log.tag.NetworkTimeUpdateService WARN 
-setprop log.tag.ThermalManager WARN 
-setprop log.tag.PrintManager WARN 
-setprop debug.egl.callstack false
-setprop debug.egl.blobcache.multifile true
-setprop debug.egl.blobcache.multifile_limit -1
-setprop debug.egl.recordable.rgba8888 1
-setprop debug.egl.finish false
+for a in debug.sf.early.app.duration debug.sf.early.sf.duration debug.sf.earlyGl.app.duration debug.sf.earlyGl.sf.duration debug.sf.earlyGl_app_phase_offset_ns debug.sf.earlyGl_phase_offset_ns debug.sf.early_app_phase_offset_ns debug.sf.early_phase_offset_ns debug.sf.late.app.duration debug.sf.late.sf.duration debug.sf.late_app_phase_offset_ns debug.sf.late_phase_offset_ns;do setprop "$a" 16666666;done;while true;do sleep 1;refresh_rate="$(dumpsys SurfaceFlinger|grep refresh-rate|awk '{print $3}')";sleep 1;duration="$(echo "1000000000/$refresh_rate/3"|bc)";sleep 1;for surface_flinger in $(getprop|grep duration|grep debug.sf|cut -f1 -d]|tr -d [);do setprop "$surface_flinger" "$duration";done;sleep 1;offset="$(echo "1000000000/$refresh_rate/3/2"|bc)";sleep 1;for surface_flinger in $(getprop|grep phase_ofset_ns|grep debug.sf|cut -f1 -d]|tr -d [);do setprop "$surface_flinger" "$offset";done;sleep 1;done>/dev/null 2>&1&
+log() {
+setprop log.tag.SQLiteQueryBuilder WARN
+setprop log.tag.FuseDaemon WARN
+setprop log.tag.GAv4 WARN
+setprop log.tag.CAM2PORT_ WARN
+setprop log.tag.FragmentManager WARN
+setprop log.tag.libfuse WARN
+setprop log.tag.AndroidRuntime WARN
+setprop log.tag.PackageManager WARN
+setprop log.tag.ActivityManager WARN
+setprop log.tag.WindowManager WARN
+setprop log.tag.AudioManager WARN
+setprop log.tag.InputMethodManager WARN
+setprop log.tag.BluetoothManager WARN
+setprop log.tag.NetworkManagement WARN
+setprop log.tag.ConnectivityManager WARN
+setprop log.tag.WifiManager WARN
+setprop log.tag.TelephonyManager WARN
+setprop log.tag.LocationManager WARN
+setprop log.tag.SensorManager WARN
+setprop log.tag.PowerManager WARN
+setprop log.tag.SurfaceFlinger WARN
+setprop log.tag.MediaPlayer WARN
+setprop log.tag.AudioPolicyManager WARN
+setprop log.tag.InputManager WARN
+setprop log.tag.AccountManager WARN
+setprop log.tag.DevicePolicyManager WARN
+setprop log.tag.WallpaperManager WARN
+setprop log.tag.BatteryManager WARN
+setprop log.tag.ContentManager WARN
+setprop log.tag.GraphicsStats WARN
+setprop log.tag.JobScheduler WARN
+setprop log.tag.UsbManager WARN
+setprop log.tag.VpnManager WARN
+setprop log.tag.NotificationManager WARN
+setprop log.tag.AlarmManager WARN
+setprop log.tag.ClipboardManager WARN
+setprop log.tag.InputDispatcher WARN
+setprop log.tag.NetworkStats WARN
+setprop log.tag.BackupManager WARN
+setprop log.tag.KeyguardManager WARN
+setprop log.tag.DeviceIdleController WARN
+setprop log.tag.ActivityTaskManager WARN
+setprop log.tag.DisplayManager WARN
+setprop log.tag.UsbHostManager WARN
+setprop log.tag.AppOps WARN
+setprop log.tag.HardwarePropertiesManager WARN
+setprop log.tag.StorageManager WARN
+setprop log.tag.ServiceManager WARN
+setprop log.tag.DockObserver WARN
+setprop log.tag.PersistentDataBlockManager WARN
+setprop log.tag.NetworkTimeUpdateService WARN
+setprop log.tag.ThermalManager WARN
+setprop log.tag.PrintManager WARN
+setprop log.tag.NetworkPolicy WARN
+setprop log.tag.BluetoothAdapter WARN
+setprop log.tag.BluetoothSocket WARN
+setprop log.tag.BluetoothDevice WARN
+setprop log.tag.MediaRouter WARN
+setprop log.tag.MediaSession WARN
+setprop log.tag.LocationProvider WARN
+setprop log.tag.ConnectivityService WARN
+setprop log.tag.BatteryStatsService WARN
+setprop log.tag.ProcessStats WARN
+setprop log.tag.PackageInstaller WARN
+setprop log.tag.SystemServer WARN
+setprop log.tag.HardwareService WARN
+setprop log.tag.PowerManagerService WARN
+setprop log.tag.InputMethodManagerService WARN
+setprop log.tag.StatusBarManagerService WARN
+setprop log.tag.NetworkManagementService WARN
+setprop log.tag.NetworkPolicyManagerService WARN
+setprop log.tag.TelephonyRegistry WARN
+setprop log.tag.MountService WARN
+setprop log.tag.WindowManagerService WARN
+setprop log.tag.DisplayManagerService WARN
+setprop log.tag.ActivityManagerService WARN
+setprop log.tag.ActivityTaskManagerService WARN
+setprop log.tag.AlarmManagerService WARN
+setprop log.tag.NotificationManagerService WARN
+setprop log.tag.VibratorService WARN
+setprop log.tag.ConsumerIrService WARN
+setprop log.tag.DevicePolicyManagerService WARN
+setprop log.tag.LocationManagerService WARN
+setprop log.tag.InputManagerService WARN
+setprop log.tag.AudioService WARN
+setprop log.tag.MediaPlayerService WARN
+setprop log.tag.AudioPolicyService WARN
+setprop log.tag.BluetoothService WARN
+setprop log.tag.BluetoothGattService WARN
+setprop log.tag.BluetoothHidService WARN
+setprop log.tag.BluetoothPanService WARN
+setprop log.tag.BluetoothMapService WARN
+setprop log.tag.BluetoothPbapService WARN
+setprop log.tag.BluetoothSapService WARN
+}
+log > /dev/null 2>&1  
+grapfifa() {
+setprop debug.egl.force_msaa false
+setprop debug.hwui.trace_gpu_resources false
+setprop debug.display.render_frame_rate_is_physical_refresh_rate true
+setprop debug.hwui.skia_use_perfetto_track_events false
+setprop debug.sf.enable_gl_backpressure true
+setprop debug.sf.show_predicted_vsync false
+setprop debug.sf.kernel_idle_timer_update_overlay false
 setprop debug.sf.enable_egl_image_tracker false
-setprop debug.sf.vrr_timeout_hint_enabled true
-setprop debug.sf.enable_legacy_frontend true
-setprop debug.sf.trace_hint_sessions false
-setprop debug.sf.enable_cached_set_render_scheduling true
-setprop debug.sf.enable_adpf_cpu_hint true
-setprop debug.sf.frame_rate_category_mrr true
-setprop debug.sf.cache_source_crop_only_moved true
-setprop debug.sf.multithreaded_present true
-setprop debug.sf.enable_vrr_config true
-setprop debug.stagefright.fps false
-setprop debug.stagefright.rtp false
-setprop debug.art.monitor.app false
-setprop debug.media.c2.large.audio.frame true
-setprop debug.adpf.use_report_actual_duration true
-setprop debug.hwc.flattenning_enabled false
-setprop debug.hwc.normalize_hint_session_durations false
-setprop debug.hwc.trace_hint_sessions false
-setprop debug.incremental.enable_read_timeouts_after_install true
-setprop debug.force_low_ram false
-setprop debug.angle.validation false
-setprop debug.c2.use_dmabufheaps 1
-setprop debug.codec2.stop_hal_before_surface false
-settings put global activity_manager_constants max_cached_processes=1024
-settings put global max_cached_processes 22900
-settings put global background_settle_time 0
-settings put global fgservice_min_shown_time 0
-settings put global fgservice_min_report_time 0
-settings put global fgservice_screen_on_before_time 0
-settings put global fgservice_screen_on_after_time 0
-settings put global content_provider_retain_time 0
-settings put global gc_timeout 0
-settings put global full_pss_min_interval 0
-settings put global full_pss_lowered_interval 0
-settings put global power_check_interval 0
-settings put global power_check_max_cpu_1 0
-settings put global power_check_max_cpu_2 0
-settings put global power_check_max_cpu_3 0
-settings put global restricted_device_performance 1,1
-settings put global activity_manager_constants max_cached_processes=0
+setprop debug.sf.edge_extension_shader false
+setprop debug.generate-debug-info false
+setprop debug.hwui.render_dirty_regions false
+setprop debug.hwui.skip_eglmanager_telemetry true
+setprop debug.hwui.capture_skp_enabled true
+setprop debug.hwui.disabledither true
+setprop debug.egl.callstack false
+setprop debug.sf.vsp_trace 0
+setprop debug.sf.drop_missed_frames 0
+setprop debug.egl.trace 0
+setprop debug.hwui.skia_tracing_enabled 0
+setprop debug.hwui.skia_atrace_enabled 0
+setprop debug.hwui.profile 0
+setprop debug.display.allow_non_native_refresh_rate_override 1
+setprop debug.hwui.skip_empty_damage 1
+setprop debug.sf.layer_history_trace 0
+setprop debug.sf.enable_gl_callback 0
+setprop debug.sf.luma_sampling 1
+setprop debug.sf.use_frame_rate_priority 1
+setprop debug.sf.vsync_trace_detailed_info 0
+setprop debug.sf.showbackground 0
+setprop debug.sf.showupdates 0
+setprop debug.onetrace.tag 0
+setprop debug.atrace.tags.enableflags 0
+setprop debug.fdtrack_enable 0
+setprop debug.hwui.early_z 1
+setprop debug.hwui.capture_skp_frames 0
+setprop debug.hwui.trace_skia 0
+setprop debug.mdpcomp.logs 0
+setprop debug.sf.dump 0
+setprop debug.sf.ddms 0
+setprop debug.egl.hw 1
+setprop debug.sf.hw 1
+settings put global activity_manager_constants max_cached_processes 2048  
+setprop debug.egl.force_msaa false  
+setprop debug.egl.force_fxaa false  
+setprop debug.egl.force_taa false  
+setprop debug.egl.force_ssaa false  
+setprop debug.egl.force_smaa false  
+setprop debug.egl.native_scaling false
+setprop debug.hwui.disable_vsync true
+setprop debug.egl.vsync 0
+setprop debug.rs.vsync false
+setprop debug.hwui.use_vsync false
+setprop debug.hwui.disable_cpu_vsync true
+setprop debug.hwui.disable_gpu_vsync true
+setprop debug.hwui.vsync 0
+setprop debug.hwui.vsync_enabled 0
+setprop debug.hwui.disable_vsync_support true
+setprop debug.hwui.vsync_support 0
+setprop debug.hwui.vsync_support_enabled 0
+settings put system activity_manager_constants \
+max_cached_processes=2, \
+background_settle_time=10000, \
+fgservice_min_shown_time=500, \
+fgservice_min_report_time=1000, \
+fgservice_screen_on_before_time=500, \
+fgservice_screen_on_after_time=2000, \
+content_provider_retain_time=5000, \
+gc_timeout=3000, \
+gc_min_interval=20000, \
+full_pss_min_interval=180000, \
+full_pss_lowered_interval=120000, \
+power_check_interval=180000, \
+power_check_max_cpu_1=70, \
+power_check_max_cpu_2=100, \
+power_check_max_cpu_3=120, \
+power_check_max_cpu_4=80, \
+service_usage_interaction_time=1200000, \
+usage_stats_interaction_interval=1200000, \
+service_restart_duration=500, \
+service_reset_run_duration=15000, \
+service_restart_duration_factor=1, \
+service_min_restart_time_between=1500, \
+service_max_inactivity=1200000, \
+service_bg_start_timeout=5000, \
+CUR_MAX_CACHED_PROCESSES=2, \
+CUR_MAX_EMPTY_PROCESSES=1, \
+CUR_TRIM_EMPTY_PROCESSES=1, \
+CUR_TRIM_CACHED_PROCESSES=1, \
+foreground_service_start_timeout=1000
+#Tối ưu game và tăng nhạy
+settings put global window_animation_scale 0.5
+settings put global transition_animation_scale 0.5
+settings put global animator_duration_scale 0.5
+setprop debug.input.resampling 1
+setprop debug.input.latency_reduction 1
+setprop debug.input.touch_boost 1
+setprop debug.input.optimize 1
+setprop debug.input.acceleration 1
+setprop debug.input.delay 0
+setprop debug.input.filter 0
+setprop debug.input.min_time 0
+setprop debug.input.max_events_per_sec 240
+setprop debug.input.multi_touch 1
+setprop debug.input.buffer_size 1024
+setprop debug.input.process_events 1
+setprop debug.input.event_queue_size 512
+setprop debug.input.response_time 1
+setprop debug.input.fast_path 1
+setprop debug.input.low_latency 1
+setprop debug.input.prefetch 1
+setprop debug.input.event_mode 2
+setprop debug.input.optimize_processing 1
+setprop debug.input.parallel_processing 1
+settings put global tombstone_enhanced_mode 1
+settings put global debug.crash_sys_key_enable 1
+settings put global debug.detailed_tombstones 1
+settings put global package_monitor_enable_tombstone 1
+settings put global tombstone_sys_error_control 1
+settings put global tombstone_anr_show_background 0
+settings put global show_tombstone_on_crash 0
+settings put global tombstone_sys_pstore 1
+setprop debug.tombstonedeadline 999999999999
+setprop debug.crash.logcat 0
+setprop debug.dumpstate.enable 1
+setprop debug.android.tombstone 1
+setprop debug.debuggerd 1
+setprop debug.dumpstate 1
+setprop debug.detailed_tombstones 1
+setprop debug.crash_sys_key_enable 1
 settings put system user_refresh_rate 120
 settings put system min_refresh_rate 120
 settings put system peak_refresh_rate 120
@@ -357,86 +390,8 @@ settings put system pointer_speed 7
 dumpsys binder_calls_stats --disable
 dumpsys binder_calls_stats --disable-detailed-tracking 
 settings put global binder_calls_stats sampling_interval=600000000,detailed_tracking=disable,enabled=false,upload_data=false
-settings put secure game_auto_temperature 0
-settings put system adaptive_fast_charging 1
-settings put system super_fast_charging 1
-settings put system wireless_fast_charging 1
-settings put global adaptive_battery_management_enabled 0
-settings put global app_standby_enabled 1
-settings put global cached_apps_freezer disabled
-settings put global enhanced_processing 0
-settings put global preferred_network_mode 9,26
-settings put global sem_enhanced_cpu_responsiveness 1
-settings put system android.wallpaper.settings_systemui_transparency 0
-settings put system min_refresh_rate 0.1
-settings put system peak_refresh_rate 0.1
-settings put secure long_press_timeout 250
-settings put secure multi_press_timeout 250
-settings put global accessibility_reduce_transparency 1
-settings put global ram_expand_size 4095,8095,9095
-settings put global zram_enabled 1
-cmd device_config put activity_manager fstrim_mandatory_interval 1
-cmd device_config put lmkd_native thrashing_limit_critical 500
-cmd device_config put activity_manager bg_current_drain_auto_restrict_abusive_apps_enabled true
-cmd device_config put activity_manager_native_boot use_freezer true
-cmd device_config put activity_manager max_cached_processes 12
-/system/bin/device_config put activity_manager max_phantom_processes 2147483647
-/system/bin/device_config put activity_manager max_cached_processes 12
-cmd device_config put activity_manager ro.FOREGROUND_APP_MEM 6400
-cmd device_config put activity_manager ro.VISIBLE_APP_MEM 8960
-cmd device_config put activity_manager ro.SECONDARY_SERVER_MEM 19200
-cmd device_config put activity_manager ro.BACKUP_APP_MEM 23040
-cmd device_config put activity_manager ro.HOME_APP_MEM 3200
-cmd device_config put activity_manager ro.HIDDEN_APP_MEM 23040
-cmd device_config put activity_manager ro.EMPTY_APP_MEM 64000
-cmd device_config put activity_manager ro.PERCEPTIBLE_APP_MEM 3200
-cmd device_config put activity_manager ro.HEAVY_WEIGHT_APP_MEM 19200
-cmd device_config put activity_manager ro.CONTENT_PROVIDER_MEM 38400
-cmd device_config put activity_manager ro.FOREGROUND_APP_ADJ 25
-cmd device_config put activity_manager ro.VISIBLE_APP_ADJ 35
-cmd device_config put activity_manager ro.SECONDARY_SERVER_ADJ 75
-cmd device_config put activity_manager ro.BACKUP_APP_ADJ 76
-cmd device_config put activity_manager ro.HOME_APP_ADJ 26
-cmd device_config put activity_manager ro.EMPTY_APP_ADJ 89
-cmd device_config put activity_manager ro.HIDDEN_APP_MIN_ADJ 250
-cmd device_config put activity_manager ro.HEAVY_WEIGHT_APP_ADJ 36
-cmd device_config put activity_manager ro.CONTENT_PROVIDER_ADJ 90
-cmd device_config put activity_manager ENFORCE_PROCESS_LIMIT false
-cmd device_config put activity_manager MAX_SERVICE_INACTIVITY false
-cmd device_config put activity_manager MIN_HIDDEN_APPS false
-cmd device_config put activity_manager MAX_HIDDEN_APPS false
-cmd device_config put activity_manager MAX_ACTIVITIES false
-cmd device_config put activity_manager MAX_RECENT_TASKS false
-cmd device_config put activity_manager MIN_RECENT_TASKS false
-cmd device_config put activity_manager MAX_PROCESSES false
-cmd device_config put activity_manager ro.FOREGROUND_APP_MEM 6400
-cmd device_config put activity_manager ro.VISIBLE_APP_MEM 8960
-cmd device_config put activity_manager ro.SECONDARY_SERVER_MEM 19200
-cmd device_config put activity_manager ro.BACKUP_APP_MEM 23040
-cmd device_config put activity_manager ro.HOME_APP_MEM 3200
-cmd device_config put activity_manager ro.HIDDEN_APP_MEM 23040
-cmd device_config put activity_manager ro.EMPTY_APP_MEM 64000
-cmd device_config put activity_manager ro.PERCEPTIBLE_APP_MEM 3200
-cmd device_config put activity_manager ro.HEAVY_WEIGHT_APP_MEM 19200
-cmd device_config put activity_manager ro.CONTENT_PROVIDER_MEM 38400
-settings put system touch.coverage.calibration box
-settings put system touch.distance.calibration area
-settings put system touch.distance.scale 0
-settings put system touch.gestureMode spots
-settings put system touch.orientation.calibration interpolated
-settings put system touch.orientationAware 1
-settings put system touch.pressure.calibration amplitude
-settings put system touch.pressure.scale 0.0001
-settings put system touch.size.bias 0
-settings put system touch.size.calibration geometric
-settings put system touch.size.isSummed 0
-settings put system touch.size.scale 1
-settings put system touch.toolSize.areaScale 22
-settings put system touch.toolSize.isSummed 0
-settings put system touch.deviceType touchScreen
-settings put system view.scroll_friction 10
 }
-fixlag > /dev/null 2>&1  
+grapfifa > /dev/null 2>&1  
 game() { 
 packages=(
   "com.garena.game.kgvn"
