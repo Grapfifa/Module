@@ -39,7 +39,8 @@ sleep 0.3
 echo "-----------------------------"
 echo ""
 echo "[+] Đang bật chế độ fix lag..."
-echo "[*] Đang tối ưu giao diện cho Brevent..."
+echo "[*] Đang bật chế độ tăng nhạy cảm ứng..."
+echo "[+] Đang bật chế độ tối ưu trò chơi..."
 refresh_rate=$(dumpsys SurfaceFlinger | grep refresh-rate | awk -F': ' '{print $2}' | awk '{print int($1+0.5)}')
 echo "$PROGRESS_DIV Display Refresh Rate: ${refresh_rate}Hz"
 case $refresh_rate in
@@ -412,6 +413,5 @@ done
 }
 game > /dev/null 2>&1  
 echo "Thành công👌"   
-echo "Đã bật chế độ fix lag trò chơi 👌"
 echo "Cảm ơn các bạn đã sử dụng 😎"
 echo "Thắng Lê Uy tín 👽"    
