@@ -9,9 +9,6 @@
         exit 0
     fi
 
-#!/bin/bash
-
-# In banner mới với thiết kế đơn giản, tinh tế
 echo "
 ========================================================
 
