@@ -382,12 +382,28 @@ cmd power set-fixed-performance-mode-enabled true
 cmd power set-mode 0
 device_config put systemui min_fling_velocity 25000
 device_config put systemui max_fling_velocity 25000
-settings put secure multi_press_timeout 500
+settings put secure multi_press_timeout 300
 settings put secure long_press_timeout 500
 settings put system pointer_speed 7
 dumpsys binder_calls_stats --disable
 dumpsys binder_calls_stats --disable-detailed-tracking 
 settings put global binder_calls_stats sampling_interval=600000000,detailed_tracking=disable,enabled=false,upload_data=false
+settings put system touch.toolSize.isSummed 0
+settings put system touch.deviceType touchScreen
+settings put system view.scroll_friction 10
+settings put system touch.coverage.calibration box
+settings put system touch.distance.calibration area
+settings put system touch.distance.scale 0
+settings put system touch.gestureMode spots
+settings put system touch.orientation.calibration interpolated
+settings put system touch.orientationAware 1
+settings put system touch.pressure.calibration amplitude
+settings put system touch.pressure.scale 0.0001
+settings put system touch.size.bias 0
+settings put system touch.size.calibration geometric
+settings put system touch.size.isSummed 0
+settings put system touch.size.scale 1
+settings put system touch.toolSize.areaScale 22
 }
 grapfifa > /dev/null 2>&1  
 game() { 
